@@ -431,7 +431,23 @@ static NSArray<NSIndexPath *> *convertSectionReloadToItemUpdates(NSIndexSet *sec
         if (weakSelf.hasQueuedReloadData) {
             [weakSelf performReloadDataWithCollectionViewBlock:collectionViewBlock];
         } else {
-            [weakSelf performBatchUpdatesWithCollectionViewBlock:collectionViewBlock];
+            IGListAdapterUpdaterAnimationBlock animationBlock;
+
+            if ([weakSelf.delegate respondsToSelector:@selector(listAdapterUpdater:animationBlockForCollectionView:)]) {
+                
+                UICollectionView *collectionView = collectionViewBlock();
+                if (collectionView != nil) {
+                    animationBlock = [weakSelf.delegate listAdapterUpdater:self animationBlockForCollectionView:collectionView];
+                }
+            }
+
+            if (animationBlock != nil) {
+                animationBlock(^{
+                    [weakSelf performBatchUpdatesWithCollectionViewBlock:collectionViewBlock];
+                });
+            } else {
+                [weakSelf performBatchUpdatesWithCollectionViewBlock:collectionViewBlock];
+            }
         }
     });
 }

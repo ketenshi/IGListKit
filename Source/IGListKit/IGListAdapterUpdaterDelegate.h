@@ -16,6 +16,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+NS_SWIFT_NAME(ListAdapterUpdaterAnimationBlock)
+typedef void (^IGListAdapterUpdaterAnimationBlock)(void (^)(void));
+
 /**
  A protocol that receives events about `IGListAdapterUpdater` operations.
  */
@@ -151,6 +154,18 @@ willPerformBatchUpdatesWithCollectionView:(UICollectionView *)collectionView
                  toObjects:(nullable NSArray *)toObjects
                 diffResult:(IGListIndexSetResult *)diffResult
                    updates:(IGListBatchUpdateData *)updates;
+
+@optional
+/**
+ Asks the delegate to provide an animation block that essentially encapsulates the `UICollectionView` **batch** update process
+
+ @param listAdapterUpdater The adapter updater owning the transition.
+ @param collectionView The collection view being updated.
+
+ @return The animation block if it is desired to customize the animation
+ */
+- (IGListAdapterUpdaterAnimationBlock _Nullable)listAdapterUpdater:(IGListAdapterUpdater *)listAdapterUpdater
+                                   animationBlockForCollectionView:(UICollectionView *)collectionView;
 
 @end
 
