@@ -441,7 +441,7 @@ static NSArray<NSIndexPath *> *convertSectionReloadToItemUpdates(NSIndexSet *sec
                 }
             }
 
-            if (animationBlock != nil) {
+            if (animationBlock) {
                 animationBlock(^{
                     [weakSelf performBatchUpdatesWithCollectionViewBlock:collectionViewBlock];
                 });
